@@ -1,4 +1,4 @@
-from src.hand_tracking import HandDetector
+from src.hand_tracking_custom import HandDetector
 
 
 class LibrasDetector(HandDetector):

@@ -25,6 +25,7 @@ class HandDetector:
         )
 
         self.mp_draw = mp.solutions.drawing_utils
+        self.DrawingSpec = self.mp_draw.DrawingSpec
 
     def find_hands(self, img, draw_hand=True):
         img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
@@ -41,16 +42,18 @@ class HandDetector:
 
         return img
 
-    def find_position(self, img, hand_number=0):
+    def find_position(self, img):
         h, w, _ = img.shape
 
-        resultado_landmark = {}
+        resultado_landmarks = []
 
         try:
-            chosen_hand = self.results.multi_hand_landmarks[hand_number]
-            for _id, landmark in enumerate(chosen_hand.landmark):
-                cx, cy = int(landmark.x * w), int(landmark.y * h)
-                resultado_landmark[_id] = cx, cy
-            return resultado_landmark
+            for chosen_hand in self.results.multi_hand_landmarks:
+                hand_landmark = {}
+                for _id, landmark in enumerate(chosen_hand.landmark):
+                    cx, cy = int(landmark.x * w), int(landmark.y * h)
+                    hand_landmark[_id] = cx, cy
+                resultado_landmarks.append(hand_landmark)
+            return resultado_landmarks
         except:
-            return {}
+            return []
